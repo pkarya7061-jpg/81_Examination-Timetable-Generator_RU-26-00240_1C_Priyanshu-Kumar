@@ -1,8 +1,5 @@
 
-
-    exit()
-
-        # Take optional holidaysfrom datetime import datetime, timedelta
+from datetime import datetime, timedelta
 
 # Take subjects from the user
 subjects_input = input("Enter subjects separated by commas: ")
@@ -19,54 +16,62 @@ elif len(set(s.lower() for s in subjects)) != len(subjects):
 else:
     try:
         # Take and validate the starting date
-        date_input = input("Enter start date (DD-MM-YYYY): ")
+        date_input = input("Enter start date (DD-MM-YYYY): ").strip()
         start_date = datetime.strptime(date_input, "%d-%m-%Y")
 
-        if start_date.strftime("%d-%m-%Y") != date_input.strip():
-    print("Invalid date format. Please use DD-MM-YYYY.")
-        holiday_input = input(
-            "Enter holidays separated by commas (or press Enter): "
-        )
+        if start_date.strftime("%d-%m-%Y") != date_input:
+            print("Invalid date format. Please use DD-MM-YYYY.")
 
-        holidays = set()
-
-        if holiday_input.strip():
-            for h in holiday_input.split(","):
-                h = h.strip()
-                holiday = datetime.strptime(h, "%d-%m-%Y")
-
-                if holiday.strftime("%d-%m-%Y") != h.strip():
-    print("Invalid holiday date. Please use DD-MM-YYYY.")
-    exit()
-
-                holidays.add(holiday.date())
-
-        # Generate the timetable
-        current_date = start_date
-        timetable = []
-
-        for subject in subjects:
-
-            # Skip Sundays and holidays
-            while (current_date.weekday() == 6
-                   or current_date.date() in holidays):
-                current_date += timedelta(days=1)
-
-            timetable.append(
-                (subject, current_date.strftime("%d-%m-%Y"),
-                 current_date.strftime("%A"))
+        else:
+            # Take optional holidays
+            holiday_input = input(
+                "Enter holidays separated by commas (or press Enter): "
             )
 
-            # Move to the next day
-            current_date += timedelta(days=1)
+            holidays = set()
 
-        # Display the timetable
-        print("\n===== EXAMINATION TIMETABLE =====")
-        print("---------------------------------")
+            if holiday_input.strip():
+                for h in holiday_input.split(","):
+                    h = h.strip()
+                    holiday = datetime.strptime(h, "%d-%m-%Y")
 
-        for subject, date, day in timetable:
-            print(f"{subject}: {date} ({day})")
+                    if holiday.strftime("%d-%m-%Y") != h:
+                        raise ValueError
+
+                    holidays.add(holiday.date())
+
+            # Generate the timetable
+            current_date = start_date
+            timetable = []
+
+            for subject in subjects:
+
+                # Skip Sundays and holidays
+                while (
+                    current_date.weekday() == 6
+                    or current_date.date() in holidays
+                ):
+                    current_date += timedelta(days=1)
+
+                timetable.append(
+                    (
+                        subject,
+                        current_date.strftime("%d-%m-%Y"),
+                        current_date.strftime("%A")
+                    )
+                )
+
+                # Move to the next day
+                current_date += timedelta(days=1)
+
+            # Display the timetable
+            print("\n===== EXAMINATION TIMETABLE =====")
+            print("---------------------------------")
+
+            for subject, date, day in timetable:
+                print(f"{subject}: {date} ({day})")
 
     except ValueError:
-        print("Invalid date. Please enter the date as DD-MM-YYYY.")
+        print("Invalid date or holiday format. Please use DD-MM-YYYY.")
+
         
