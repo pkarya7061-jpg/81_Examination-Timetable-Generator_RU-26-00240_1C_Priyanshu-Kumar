@@ -1,5 +1,8 @@
 
-from datetime import datetime, timedelta
+
+    exit()
+
+        # Take optional holidaysfrom datetime import datetime, timedelta
 
 # Take subjects from the user
 subjects_input = input("Enter subjects separated by commas: ")
@@ -19,10 +22,8 @@ else:
         date_input = input("Enter start date (DD-MM-YYYY): ")
         start_date = datetime.strptime(date_input, "%d-%m-%Y")
 
-        if start_date.strftime("%d-%m-%Y") != date_input:
-            raise ValueError
-
-        # Take optional holidays
+        if start_date.strftime("%d-%m-%Y") != date_input.strip():
+    print("Invalid date format. Please use DD-MM-YYYY.")
         holiday_input = input(
             "Enter holidays separated by commas (or press Enter): "
         )
@@ -34,8 +35,9 @@ else:
                 h = h.strip()
                 holiday = datetime.strptime(h, "%d-%m-%Y")
 
-                if holiday.strftime("%d-%m-%Y") != h:
-                    raise ValueError
+                if holiday.strftime("%d-%m-%Y") != h.strip():
+    print("Invalid holiday date. Please use DD-MM-YYYY.")
+    exit()
 
                 holidays.add(holiday.date())
 
